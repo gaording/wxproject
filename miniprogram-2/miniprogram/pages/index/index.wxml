@@ -1,0 +1,264 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <!-- 预览区域 -->
+  <view class="preview-container">
+    <canvas style="width: 300px; height: 400px;" canvas-id="coverCanvas"></canvas>
+    
+    <!-- 生成结果预览 -->
+    <view wx:if="{{generatedImage}}" class="result-preview">
+      <image src="{{generatedImage}}" mode="aspectFit" class="result-image"></image>
+    </view>
+  </view>
+
+  <!-- 操作面板 -->
+  <view class="operation-panel">
+    <view class="btn-group">
+      <button class="op-btn" bindtap="selectBackground">
+        <text class="icon">🖼️</text>
+        <text>选择背景</text>
+      </button>
+      
+      <button class="op-btn" bindtap="showTextEdit">
+        <text class="icon">✍️</text>
+        <text>编辑文字</text>
+      </button>
+    </view>
+    
+    <view class="btn-group">
+      <button class="op-btn" bindtap="showFontSetting">
+        <text class="icon">🎨</text>
+        <text>字体设置</text>
+      </button>
+      
+      <button class="op-btn" bindtap="showBorderSetting">
+        <text class="icon">📏</text>
+        <text>边框设置</text>
+      </button>
+    </view>
+    
+    <view class="btn-group">
+      <button class="op-btn" bindtap="showMemePanel">
+        <text class="icon">🤪</text>
+        <text>恶搞功能</text>
+      </button>
+      
+      <button class="op-btn" bindtap="showFilterPanel">
+        <text class="icon">🌈</text>
+        <text>滤镜效果</text>
+      </button>
+    </view>
+    
+    <button class="generate-btn" bindtap="generateCover" disabled="{{isGenerating}}">
+      {{isGenerating ? '生成中...' : '生成红包封面'}}
+    </button>
+    
+    <button class="replace-btn" bindtap="showReplaceModal" wx:if="{{generatedImage}}">
+      一键替换红包封面
+    </button>
+  </view>
+
+  <!-- 文字编辑弹窗 -->
+  <view class="modal" wx:if="{{showTextEditor}}" bindtap="closeAllPanels">
+    <view class="modal-content" catchtap="noop">
+      <view class="modal-header">
+        <text>编辑文字</text>
+        <text class="close-btn" bindtap="closeAllPanels">×</text>
+      </view>
+      <view class="modal-body">
+        <input 
+          class="text-input" 
+          value="{{textContent}}" 
+          placeholder="输入祝福语" 
+          bindinput="updateTextContent"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 字体设置弹窗 -->
+  <view class="modal" wx:if="{{showFontSettings}}" bindtap="closeAllPanels">
+    <view class="modal-content" catchtap="noop">
+      <view class="modal-header">
+        <text>字体设置</text>
+        <text class="close-btn" bindtap="closeAllPanels">×</text>
+      </view>
+      <view class="modal-body">
+        <view class="setting-item">
+          <text>字体大小: {{fontSize}}</text>
+          <slider 
+            min="10" 
+            max="60" 
+            value="{{fontSize}}" 
+            bindchange="updateFontSize"
+            show-value
+          />
+        </view>
+        
+        <view class="setting-item">
+          <text>文字颜色:</text>
+          <input 
+            class="color-input" 
+            type="text" 
+            value="{{textColor}}" 
+            bindinput="updateTextColor"
+          />
+          <view class="color-preview" style="background-color: {{textColor}};"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 边框设置弹窗 -->
+  <view class="modal" wx:if="{{showBorderSettings}}" bindtap="closeAllPanels">
+    <view class="modal-content" catchtap="noop">
+      <view class="modal-header">
+        <text>边框设置</text>
+        <text class="close-btn" bindtap="closeAllPanels">×</text>
+      </view>
+      <view class="modal-body">
+        <view class="setting-item">
+          <text>边框宽度: {{borderWidth}}</text>
+          <slider 
+            min="0" 
+            max="20" 
+            value="{{borderWidth}}" 
+            bindchange="updateBorderWidth"
+            show-value
+          />
+        </view>
+        
+        <view class="setting-item">
+          <text>边框颜色:</text>
+          <input 
+            class="color-input" 
+            type="text" 
+            value="{{borderColor}}" 
+            bindinput="updateBorderColor"
+          />
+          <view class="color-preview" style="background-color: {{borderColor}};"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 恶搞功能弹窗 -->
+  <view class="modal" wx:if="{{showMemePanel}}" bindtap="closeAllPanels">
+    <view class="modal-content meme-panel" catchtap="noop">
+      <view class="modal-header">
+        <text>恶搞功能</text>
+        <text class="close-btn" bindtap="closeAllPanels">×</text>
+      </view>
+      <view class="modal-body">
+        <view class="meme-grid">
+          <block wx:for="{{memeOptions}}" wx:key="id">
+            <view 
+              class="meme-option {{selectedMeme == item.id ? 'selected' : ''}}" 
+              data-id="{{item.id}}"
+              bindtap="selectMeme"
+            >
+              {{item.name}}
+            </view>
+          </block>
+        </view>
+        
+        <view class="setting-item" wx:if="{{selectedMeme}}">
+          <text>效果强度: {{memeIntensity}}</text>
+          <slider 
+            min="0" 
+            max="100" 
+            value="{{memeIntensity}}" 
+            bindchange="updateMemeIntensity"
+            show-value
+          />
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 滤镜面板 -->
+  <view class="modal" wx:if="{{showFilters}}" bindtap="closeAllPanels">
+    <view class="modal-content filter-panel" catchtap="noop">
+      <view class="modal-header">
+        <text>滤镜效果</text>
+        <text class="close-btn" bindtap="closeAllPanels">×</text>
+      </view>
+      <view class="modal-body">
+        <view class="filter-options">
+          <view 
+            class="filter-option {{filterType == 'none' ? 'selected' : ''}}" 
+            data-filter="none"
+            bindtap="selectFilter"
+          >
+            原图
+          </view>
+          <view 
+            class="filter-option {{filterType == 'grayscale' ? 'selected' : ''}}" 
+            data-filter="grayscale"
+            bindtap="selectFilter"
+          >
+            灰度
+          </view>
+          <view 
+            class="filter-option {{filterType == 'sepia' ? 'selected' : ''}}" 
+            data-filter="sepia"
+            bindtap="selectFilter"
+          >
+            怀旧
+          </view>
+          <view 
+            class="filter-option {{filterType == 'invert' ? 'selected' : ''}}" 
+            data-filter="invert"
+            bindtap="selectFilter"
+          >
+            反色
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 替换封面模态框 -->
+  <view class="modal" wx:if="{{showReplaceModal}}" bindtap="closeAllPanels">
+    <view class="modal-content replace-panel" catchtap="noop">
+      <view class="modal-header">
+        <text>设置封面信息</text>
+        <text class="close-btn" bindtap="closeAllPanels">×</text>
+      </view>
+      <view class="modal-body">
+        <view class="setting-item">
+          <text>封面名称:</text>
+          <input 
+            class="text-input" 
+            value="{{coverTitle}}" 
+            placeholder="输入封面名称" 
+            bindinput="updateCoverTitle"
+          />
+        </view>
+        
+        <view class="setting-item">
+          <text>封面描述:</text>
+          <input 
+            class="text-input" 
+            value="{{coverDesc}}" 
+            placeholder="输入封面描述" 
+            bindinput="updateCoverDesc"
+          />
+        </view>
+        
+        <view class="setting-item">
+          <text>作者信息:</text>
+          <input 
+            class="text-input" 
+            value="{{coverAuthor}}" 
+            placeholder="输入作者信息" 
+            bindinput="updateCoverAuthor"
+          />
+        </view>
+        
+        <button class="confirm-replace-btn" bindtap="replaceCover">
+          确认替换红包封面
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

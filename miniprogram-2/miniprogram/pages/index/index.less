@@ -1,0 +1,232 @@
+/* pages/index/index.less */
+@primary-color: #ff6b6b;
+@secondary-color: #4ecdc4;
+@success-color: #4CAF50;
+@border-color: #e0e0e0;
+@bg-color: #f8f8f8;
+@text-color: #333;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  background-color: @bg-color;
+  min-height: 100vh;
+}
+
+.preview-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30rpx;
+}
+
+.result-preview {
+  margin-top: 20rpx;
+}
+
+.result-image {
+  width: 300rpx;
+  height: 400rpx;
+  border-radius: 10rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+}
+
+.operation-panel {
+  width: 100%;
+  padding: 0 20rpx;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+
+  &:last-child {
+    margin-bottom: 30rpx;
+  }
+}
+
+.op-btn {
+  flex: 1;
+  margin: 0 10rpx;
+  background-color: #ffffff;
+  border: 1rpx solid @border-color;
+  border-radius: 10rpx;
+  padding: 20rpx 10rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 28rpx;
+  color: @text-color;
+
+  .icon {
+    font-size: 40rpx;
+    margin-bottom: 10rpx;
+  }
+}
+
+.generate-btn {
+  background-color: @primary-color;
+  color: white;
+  border: none;
+  border-radius: 10rpx;
+  padding: 30rpx;
+  font-size: 32rpx;
+  margin: 20rpx 0;
+}
+
+.replace-btn {
+  background-color: @success-color;
+  color: white;
+  border: none;
+  border-radius: 10rpx;
+  padding: 30rpx;
+  font-size: 32rpx;
+  margin: 20rpx 0;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 20rpx;
+  width: 80%;
+  max-width: 500rpx;
+  overflow: hidden;
+
+  &.meme-panel {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  &.replace-panel {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  background-color: @bg-color;
+  font-weight: bold;
+}
+
+.close-btn {
+  font-size: 40rpx;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 30rpx;
+}
+
+.setting-item {
+  margin-bottom: 30rpx;
+
+  text:first-child {
+    display: block;
+    margin-bottom: 10rpx;
+    font-size: 28rpx;
+  }
+}
+
+.text-input {
+  width: 100%;
+  padding: 20rpx;
+  border: 1rpx solid @border-color;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+}
+
+.color-input {
+  width: 70%;
+  padding: 10rpx;
+  border: 1rpx solid @border-color;
+  border-radius: 5rpx;
+  font-size: 24rpx;
+}
+
+.color-preview {
+  display: inline-block;
+  width: 40rpx;
+  height: 40rpx;
+  border: 1rpx solid #ccc;
+  border-radius: 5rpx;
+  vertical-align: middle;
+  margin-left: 10rpx;
+}
+
+.meme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15rpx;
+  margin-bottom: 30rpx;
+}
+
+.meme-option {
+  padding: 20rpx;
+  border: 1rpx solid @border-color;
+  border-radius: 10rpx;
+  text-align: center;
+  background-color: #fff;
+  transition: all 0.3s;
+
+  &.selected {
+    background-color: @primary-color;
+    color: white;
+    border-color: @primary-color;
+  }
+}
+
+.filter-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15rpx;
+}
+
+.filter-option {
+  padding: 20rpx;
+  border: 1rpx solid @border-color;
+  border-radius: 10rpx;
+  text-align: center;
+  background-color: #fff;
+  transition: all 0.3s;
+
+  &.selected {
+    background-color: @secondary-color;
+    color: white;
+    border-color: @secondary-color;
+  }
+}
+
+.confirm-replace-btn {
+  background-color: @success-color;
+  color: white;
+  border: none;
+  border-radius: 10rpx;
+  padding: 30rpx;
+  font-size: 32rpx;
+  margin-top: 20rpx;
+  width: 100%;
+}
+
+.slider {
+  margin: 20rpx 0;
+}
